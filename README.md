@@ -1,14 +1,37 @@
 # PureChart-Vision-releases
 
-Deployed binaries for **PureChart Vision** (built artifacts only — not source).
+**Distribution repo for PureChart Vision — installers live under
+[Releases](https://github.com/insert-aaron/PureChart-Vision/releases), not in this
+file tree.**
 
-Populated by `scripts/build-and-deploy.sh` / CI from the source repo. Contains:
+> Do **not** `git clone` this repo to install or update. It uses **Velopack**
+> (a .NET auto-updater), so the app is distributed as GitHub **Release assets**,
+> and the app updates itself. The old git-pull-on-launch model (PureXS/PureXR) is
+> not used here.
 
-- `PureChartVision.exe` + self-contained .NET 8 runtime (x64)
-- `PluginHost.exe` — x86 net48 TWAIN host (intraoral capture)
-- `python/` — embedded Python interpreter
-- `decoder/` — Python reconstruction pipeline (panoramic)
-- `SetupAndRun.bat` — clinic installer/updater/launcher
+## Install (once, per clinic PC)
 
-Clinic PCs run `SetupAndRun.bat`, which `git reset --hard` to the latest
-commit here and launches the app. **Do not commit source or PHI to this repo.**
+1. Open the latest release:
+   https://github.com/insert-aaron/PureChart-Vision-releases/releases/latest
+2. Download **`PureChartVision-win-Setup.exe`** and run it.
+
+That's it — no git, no admin, no .NET or Python install (all bundled).
+
+## Updates (automatic)
+
+On launch the app checks this repo's Releases feed, downloads any new version in
+the background, and applies it silently **when you next close the app**. So each
+close → reopen leaves you on the latest build. No action required.
+
+## For maintainers
+
+Every push to `main` on the source repo (`insert-aaron/PureChart-Vision`, private)
+runs CI that builds the app and publishes a new GitHub Release here via
+`vpk pack` + `vpk upload github`. The release assets are:
+
+- `PureChartVision-win-Setup.exe` — the installer
+- `PureChartVision-<ver>-full.nupkg` (+ delta packages) — update packages
+- `RELEASES`, `releases.win.json` — the Velopack update feed
+- `PureChartVision-win-Portable.zip` — portable build
+
+This file tree intentionally holds only this README.
